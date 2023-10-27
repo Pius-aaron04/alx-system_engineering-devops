@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# prints 1 to 100, prints fizz, buzz or fizzbuzz for mutiples of 3, 5 or both
+
+for i in {1..100};
+do
+	if [ $((i % 3)) -eq 0 ] && [ $((i % 5)) -ne 0 ]
+	then
+		echo "Fizz"
+	elif [ $((i % 5)) -eq 0 ] && [ $((i % 3)) -ne 0 ]
+	then
+		echo "Buzz"
+	elif [ $((i % 15)) -eq 0 ]
+	then
+		echo "FizzBuzz"
+	else
+		echo "$i"
+	fi
+done

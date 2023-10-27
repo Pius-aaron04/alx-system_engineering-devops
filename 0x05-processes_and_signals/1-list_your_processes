@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 # Displays list of processes by all users based on their hierarchy
-ps -axu
+ps axu

@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+#Prints the Pid of it's own process
+echo $$

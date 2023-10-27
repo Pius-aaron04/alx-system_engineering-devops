@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# Prints number ranging 1 to 20 with message for 4, 9 and 17
+
+n=1
+
+while ((n <= 20))
+do
+	case $n in
+	4)
+	echo "$n"
+	echo "bad luck from China"
+	;;
+	9)
+	echo "$n"
+	echo "bad luck from Japan"
+	;;
+	17)
+	echo "$n"
+	echo "bad luck from Italy"
+	;;
+	*)
+	echo "$n"
+	;;
+	esac
+	((n++))
+done

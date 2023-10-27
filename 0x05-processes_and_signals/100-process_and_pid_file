@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+# Creates a stubborn process ans stores it pid in /var/run/myscript.pid
+# very stubborn process
+
+echo $$ > /var/run/myscript.pid
+function msga()
+{
+	echo "I hate the kill command"
+	rm /var/run/myscript.pid
+	exit
+}
+
+function msgb()
+{
+	echo "Y U no love me?!"
+	exit
+}
+
+while true;
+do
+	echo "To infinity and beyond"
+	sleep 2
+	trap msgb SIGINT
+	trap msga SIGTERM
+	trap exit SIGQUIT
+done

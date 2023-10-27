@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 # Kills 4-to_infinity_and_beyond process
-id=$(pgrep bash | tail -3 | head -1)
+id=$(pgrep -f "4-to_infinity_and_beyond")
 kill "$id"

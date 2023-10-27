@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 # Creates a stubborn process ans stores it pid in /var/run/myscript.pid
 # very stubborn process
 

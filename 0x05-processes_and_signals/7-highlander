@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Indefinite process that refuses to die
+
+function catch ()
+{
+	echo "I am invincible!!!"
+}
+
+while true;
+do
+	echo "To infinity and beyond"
+	sleep 2
+
+	trap catch TERM
+done

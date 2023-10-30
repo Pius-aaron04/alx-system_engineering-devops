@@ -1,4 +1,3 @@
 #!/bin/env bash
 # prints ip http status code of visitors
-
-awk '{print $1 $9}' apache-access.log
+awk '{print $1,$9}' apache-access.log

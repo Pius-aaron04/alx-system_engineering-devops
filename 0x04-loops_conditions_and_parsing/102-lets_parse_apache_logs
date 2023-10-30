@@ -1,4 +1,4 @@
-#!/bin/env bash
-# prints ip http status code of visitors
+#!/usr/bin/env bash
+# prints http and ip address
 
 awk '{print $1,$9}' apache-access.log

@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# measure round-trip time from ip passed as argument
+if [ $# -ne 1 ]
+then
+	echo "Usage: 5-is_the_host_on_the_network {IP_ADDRESS}"
+	exit
+fi
+
+ping -c 5 $1

@@ -3,12 +3,13 @@
 interfaces=$(ifconfig -a | grep -oP '^[^\s:]+')
 
 # Iterate over each interface
-for interface in $interfaces; do
+for interface in $interfaces
+do
   # Get the IPv4 address for the interface
-  ipv4=$(ifconfig $interface | awk '/inet /{print $2}')
+  ipv4=$(ifconfig "$interface" | awk '/inet /{print $2}')
 
   # Display the IPv4 address if it is not empty
-  if [ ! -z "$ipv4" ]; then
+  if [ -n "$ipv4" ]; then
     echo "$ipv4"
   fi
 done

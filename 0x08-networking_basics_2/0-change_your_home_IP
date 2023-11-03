@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+#changes the IPv4 address of the localhost and facebook in the /etc/hosts file
+
+localhost="127.0.0.2"
+old="127.0.0.1"
+cp /etc/hosts new
+sed -i "s/$old/$localhost/g" new
+if grep -qF "facebook.com" /etc/hosts;
+then
+	cp new /etc/hosts
+	rm new
+	exit
+else
+	echo "8.8.8.8	facebook.com" >> new
+	cp new /etc/hosts
+	rm new
+fi

@@ -1,2 +1,2 @@
-IdentityFile ~/.ssh/school
-PasswordAuthentication no
+IdentityFile ~/.ssh/schol
+PasswordAuthentication yes

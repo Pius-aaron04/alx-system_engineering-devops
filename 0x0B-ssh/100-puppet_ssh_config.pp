@@ -4,7 +4,7 @@ IdentityFile ~/.ssh/school
 PasswordAuthentication no
 EOF
 
-file { '/home/root/.ssh/config':
+file { '/etc/ssh/ssh_config':
   ensure  => present,
   content => $file_content,
 }

@@ -1,2 +1,2 @@
 IdentityFile ~/.ssh/schol
-PasswordAuthentication yes
+PasswordAuthentication no

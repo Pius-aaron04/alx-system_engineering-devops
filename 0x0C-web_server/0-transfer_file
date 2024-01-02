@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# transfers file provided to specified server
+
+if [ $# -lt 3 ]
+then
+    echo "Usage: 0-transfer_file PATH_TO_FILE IP USERNAME PATH_TO_SSH_KEY"
+    exit
+fi
+
+file_path="$1"
+user="$2"
+key="$3"
+
+scp -i "$key" "$file_path" "$user":~/

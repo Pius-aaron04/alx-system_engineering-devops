@@ -10,5 +10,10 @@ fi
 file_path="$1"
 user="$2"
 key="$3"
-
-scp -i "$key" "$file_path" "$user":~/
+if [ $# = 3 ]
+then
+    scp -i "$key" "$file_path" "$user":~/
+else
+    key="$4"
+    scp -i "$key" "$file_path" "$user"@"$3":~/
+fi

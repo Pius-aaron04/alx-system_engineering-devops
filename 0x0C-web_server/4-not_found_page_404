@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+# configures new Ubuntu machine with Nginx server
+
+if dpkg -l | grep -q "nginx"; then
+    echo "Nginx is already installed."
+else
+    if ! sudo apt-get update; then
+        echo "Failed to update package lists. Exiting."
+        exit 1
+    fi
+
+    if ! sudo apt-get -y install nginx; then
+        echo "Failed to install Nginx. Exiting."
+        exit 1
+    fi
+fi
+
+if ! sudo ufw allow "Nginx HTTP"; then
+    echo "Failed to allow Nginx HTTP traffic in the firewall."
+fi
+
+root_dir="/var/www/techsorce.tech/html"
+if [ ! -d "$root_dir" ];
+then
+    sudo mkdir -p "$root_dir"
+    sudo chmod -R "$USER":"$USER" "$root_dir"
+    sudo chmod -R 755 "$root_dir"
+fi
+echo "Hello World!" | sudo tee /"$root_dir"/index.html > /dev/null
+echo "Ceci n'est pas une page" | sudo tee /"$root_dir"/404.html > /dev/null
+CONFIG_FILE="/etc/nginx/sites-available/techsorce.tech"
+
+if [ ! -f $CONFIG_FILE ];
+then
+    sudo cp /etc/nginx/sites-available/default "$CONFIG_FILE"
+    touch "$root_dir"/redirect_me
+    sudo tee "$CONFIG_FILE" > /dev/null << EOF
+server {
+    listen 80;
+    server_name techsorce.tech;
+    root /var/www/techsorce.tech/html;
+    index /index.html;
+    error_page 404 /404.html;
+    location /redirect_me {
+        return 301 /$request_uri;
+    }
+}
+EOF
+    sudo ln -s "$CONFIG_FILE" /etc/nginx/sites-enabled
+fi
+service nginx start

@@ -18,5 +18,5 @@ fi
 if ! sudo ufw allow "Nginx HTTP"; then
     echo "Failed to allow Nginx HTTP traffic in the firewall."
 fi
-
 echo "Hello World!" | sudo tee /var/www/html/index.nginx-debian.html > /dev/null
+service nginx start

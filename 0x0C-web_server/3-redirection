@@ -19,20 +19,30 @@ if ! sudo ufw allow "Nginx HTTP"; then
     echo "Failed to allow Nginx HTTP traffic in the firewall."
 fi
 echo "Hello World!" | sudo tee /var/www/html/index.nginx-debian.html > /dev/null
-service nginx start
 
+root_dir="/var/www/techsorce.tech/html"
+if [ ! -d "$root_dir" ];
+then
+    sudo mkdir -p "$root_dir"
+    sudo chmod -R $USER:$USER "$root_dir"
+    sudo chmod -R 755 "$root_dir"
+fi
 CONFIG_FILE="/etc/nginx/sites-available/techsorce.tech"
 
 if [ ! -f $CONFIG_FILE ];
 then
-    touch $CONFIG_FILE
+    sudo cp /etc/nginx/sites-available/default "$CONFIG_FILE"
+    touch "$root_dir"/redirect_me
     sudo tee "$CONFIG_FILE" > /dev/null << EOF
 server {
     listen 80;
     server_name techsorce.tech;
+    root /var/www/techsorce.tech/html;
     location /redirect_me {
-        return 301 https://newdomain.com$request_uri;
+        return 301 https://techsorce.tech$request_uri;
     }
 }
 EOF
+    sudo ln -s "$CONFIG_FILE" /etc/nginx/sites-enabled
 fi
+service nginx start

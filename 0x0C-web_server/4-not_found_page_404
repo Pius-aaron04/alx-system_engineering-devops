@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 # configures new Ubuntu machine with Nginx server
 
-
-# checks if Nginx is intalled
 if dpkg -l | grep -q "nginx"; then
     echo "Nginx is already installed."
 else
@@ -17,12 +15,10 @@ else
     fi
 fi
 
-# activates firewall on port 80
 if ! sudo ufw allow "Nginx HTTP"; then
     echo "Failed to allow Nginx HTTP traffic in the firewall."
 fi
 
-#Creates a server block for the domain
 root_dir="/var/www/techsorce.tech/html"
 if [ ! -d "$root_dir" ];
 then
@@ -30,8 +26,8 @@ then
     sudo chmod -R "$USER":"$USER" "$root_dir"
     sudo chmod -R 755 "$root_dir"
 fi
-echo "Hello World!" > "$root_dir"/index.html
-echo "Ceci n'est pas une page" > "$root_dir"/404.html
+echo "Hello World!" | sudo tee /"$root_dir"/index.html > /dev/null
+echo "Ceci n'est pas une page" | sudo tee "$root_dir"/404.html > /dev/null
 CONFIG_FILE="/etc/nginx/sites-available/techsorce.tech"
 
 if [ ! -f $CONFIG_FILE ];
@@ -45,9 +41,6 @@ server {
     root /var/www/techsorce.tech/html;
     index index.html;
     error_page 404 /404.html;
-    location / {
-        try_files $uri $uri/ /404.html;
-    }
     location /redirect_me {
         return 301 https://techsorce.tech$request_uri;
     }

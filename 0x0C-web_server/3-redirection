@@ -41,7 +41,7 @@ server {
     root /var/www/techsorce.tech/html;
     index /index.html;
     location /redirect_me {
-        return 301 /$request_uri;
+        return 301 https//:techsorce.tech$request_uri;
     }
 }
 EOF

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # configures new Ubuntu machine with Nginx server
+# shellcheck disable=SC2154
 
 if dpkg -l | grep -q "nginx"; then
     echo "Nginx is already installed."
@@ -30,22 +31,21 @@ echo "Hello World!" | sudo tee /"$root_dir"/index.html > /dev/null
 echo "Ceci n'est pas une page" | sudo tee "$root_dir"/404.html > /dev/null
 CONFIG_FILE="/etc/nginx/sites-available/techsorce.tech"
 
+if [ -e /etc/nginx/sites-available/default ]; then
+            # Backup existing configuration
+    if ! sudo cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak; then
+         echo "Failed to backup the Nginx configuration. Continuing without backup."
+    else
+         echo "Nginx configuration backed up successfully."
+    fi
+
+fi
 if [ ! -f $CONFIG_FILE ];
 then
     sudo cp /etc/nginx/sites-available/default "$CONFIG_FILE"
-    touch "$root_dir"/redirect_me
-    sudo tee "$CONFIG_FILE" > /dev/null << EOF
-server {
-    listen 80;
-    server_name techsorce.tech;
-    root /var/www/techsorce.tech/html;
-    index index.html;
-    error_page 404 /404.html;
-    location /redirect_me {
-        return 301 https://techsorce.tech$request_uri;
-    }
-}
-EOF
+
+    replace="listen 80 default_server;\n\tserver_name techsorce.tech;\n\troot \/var\/www\/techsorce.tech\/html;\n\tindex index.html;\n\terror_page 404 \/404.html;\n\tlocation /redirect_me {\n\treturn 301 https://techsorce.tech$request_uri;}"
+    sudo sed s/"listen 80 default_server"/"${replace}"/g $CONFIG_FILE
     sudo ln -s "$CONFIG_FILE" /etc/nginx/sites-enabled
 fi
 service nginx start

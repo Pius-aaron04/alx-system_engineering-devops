@@ -1,14 +1,11 @@
 # Manifest Installs and configures Nginx Web server
 
-$config=@(EOF)
+$nginx_config=@(EOF)
 server{
-    listen 80;
-    server_name techsorce.tech;
-    root /var/www/techsorce.tech/html;
-    index /index.html;
-    loaction /redirect_me{
-        return 301 https://techsorce.tech$urirequest;
-    }
+    listen 80 default_server;
+    root /var/www//html;
+    index index.html;
+    rewrite ^/redirect_me https://github.com/pius-aaron04 permanent;
 }
 EOF
 class webserver::nginx{
@@ -18,25 +15,19 @@ class webserver::nginx{
     provider => "apt",
   }
 
-  file{ '/var/www/techsorce.tech/html/index.html':
+  file{ '/var/www/html/index.html':
     ensure   => present,
     content  => "Hello World!",
   }
 
-  file { '/etc/nginx/sites-available/techsorce.tech':
+  file { '/etc/nginx/sites-available/default.bk':
+    ensure  => present,
+    source  => File['/etc/nginx/sites-available/default']
+  }
+  file { '/etc/nginx/sites-available/default':
     ensure   => present,
     notify   => Service['nginx'],
-    content  => $config,
-    mode     => 755,
-  }
-
-  file { '/etc/nginx/sites-enabled/techsorce.tech':
-    ensure   => link,
-    target   => '/etc/nginx/sites-available/techsorce.tech',
-    required => FILE['/etc/nginx/sites-available/techsorce.tech'],
-    mode     => '755',
-    user     => 'ubuntu',
-    group    => 'ubuntu',
+    content  => $nginx_config,
   }
 
   service{ 'nginx':

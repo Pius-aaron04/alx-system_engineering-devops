@@ -32,7 +32,7 @@ if [ -e /etc/nginx/sites-available/default ]; then
 
 fi
 
-sudo sed -i '/listen 80 default_server/a rewrite ^/redirect_me https://github.com/chimaskyy permanent; ' /etc/nginx/sites-available/default
+sudo sed -i '/listen 80 default_server/a rewrite ^/redirect_me https://github.com/pius-aaron04 permanent; ' /etc/nginx/sites-available/default
 
 echo "Ceci n'est pas une page" | sudo tee /var/www/html/404.html > /dev/null
 
@@ -40,5 +40,3 @@ replace="listen 80 default_server;\n\terror_page 404 \/404.html;\n\tlocation = \
 sudo sed -i "s/listen 80 default_server;/$replace/" /etc/nginx/sites-available/default
 
 sudo service nginx restart
-
-echo "Nginx configured successfully."

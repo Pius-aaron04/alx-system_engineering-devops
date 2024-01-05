@@ -1,6 +1,6 @@
 # Manifest Installs and configures Nginx Web server
 
-CONFIG=@("EOF")
+$config=@(EOF)
 server{
     listen 80;
     server_name techsorce.tech;
@@ -19,15 +19,15 @@ class webserver::nginx{
   }
 
   file{ '/var/www/techsorce.tech/html/index.html':
-    ensure => present,
-    content => "Hello World!",
+    ensure   => present,
+    content  => "Hello World!",
   }
 
   file { '/etc/nginx/sites-available/techsorce.tech':
-    ensure  => present,
-    notify  => Service['nginx'],
-    content => $CONFIG,
-    mode    => 755,
+    ensure   => present,
+    notify   => Service['nginx'],
+    content  => $config,
+    mode     => 755,
   }
 
   file { '/etc/nginx/sites-enabled/techsorce.tech':
@@ -41,6 +41,6 @@ class webserver::nginx{
 
   service{ 'nginx':
     ensure   => running,
-    enable  => true,
+    enable   => true,
   }
 }

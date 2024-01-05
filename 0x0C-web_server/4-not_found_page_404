@@ -20,16 +20,7 @@ if ! sudo ufw allow "Nginx HTTP"; then
     echo "Failed to allow Nginx HTTP traffic in the firewall."
 fi
 
-root_dir="/var/www/techsorce.tech/html"
-if [ ! -d "$root_dir" ];
-then
-    sudo mkdir -p "$root_dir"
-    sudo chmod -R "$USER":"$USER" "$root_dir"
-    sudo chmod -R 755 "$root_dir"
-fi
-echo "Hello World!" | sudo tee /"$root_dir"/index.html > /dev/null
-echo "Ceci n'est pas une page" | sudo tee "$root_dir"/404.html > /dev/null
-CONFIG_FILE="/etc/nginx/sites-available/techsorce.tech"
+echo "Hello World!" | sudo tee /var/www/html/index.nginx-debian.html > /dev/null
 
 if [ -e /etc/nginx/sites-available/default ]; then
             # Backup existing configuration
@@ -40,12 +31,14 @@ if [ -e /etc/nginx/sites-available/default ]; then
     fi
 
 fi
-if [ ! -f $CONFIG_FILE ];
-then
-    sudo cp /etc/nginx/sites-available/default "$CONFIG_FILE"
 
-    replace="listen 80 default_server;\n\tserver_name techsorce.tech;\n\troot \/var\/www\/techsorce.tech\/html;\n\tindex index.html;\n\terror_page 404 \/404.html;\n\tlocation /redirect_me {\n\treturn 301 https://techsorce.tech$request_uri;}"
-    sudo sed s/"listen 80 default_server"/"${replace}"/g $CONFIG_FILE
-    sudo ln -s "$CONFIG_FILE" /etc/nginx/sites-enabled
-fi
-service nginx start
+sudo sed -i '/listen 80 default_server/a rewrite ^/redirect_me https://github.com/chimaskyy permanent; ' /etc/nginx/sites-available/default
+
+echo "Ceci n'est pas une page" | sudo tee /var/www/html/404.html > /dev/null
+
+replace="listen 80 default_server;\n\terror_page 404 \/404.html;\n\tlocation = \/404.html {\n\t\troot \/var\/www\/html;\n\t\tinternal;\n\t}"
+sudo sed -i "s/listen 80 default_server;/$replace/" /etc/nginx/sites-available/default
+
+sudo service nginx restart
+
+echo "Nginx configured successfully."

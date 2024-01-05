@@ -3,7 +3,7 @@
 $nginx_config=@(EOF)
 server{
     listen 80 default_server;
-    index index.html;
+    index /index.html;
     rewrite ^/redirect_me https://github.com/pius-aaron04 permanent;
     error_page 404 /404.html;
     location = /404.html{
@@ -37,6 +37,7 @@ class webserver::nginx{
   file { '/etc/nginx/sites-available/default':
     ensure   => present,
     notify   => Service['nginx'],
+    mode     => '644',
     content  => "$nginx_config",
   }
 

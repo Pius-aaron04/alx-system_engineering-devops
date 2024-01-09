@@ -44,7 +44,7 @@ sudo sed -i '/^\slisten 80 default_server;/ {
 
 # Add header to Nginx configuration
 sudo sed -i '/^\s*try_files \$uri \$uri\/ =404;/ {
-    s|^\s*try_files \$uri \$uri\/ =404;|&\n    add_header X-Served-By \$host;|
+    s|^\s*try_files \$uri \$uri\/ =404;|&\n    add_header X-Served-By \$hostname;|
 }' /etc/nginx/sites-available/default
 
 # Create custom 404 page

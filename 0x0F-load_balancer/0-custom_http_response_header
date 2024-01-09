@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+# configures new Ubuntu machine with Nginx server
+# shellcheck disable=SC2154
+
+if dpkg -l | grep -q "nginx"; then
+    echo "Nginx is already installed."
+else
+    if ! sudo apt-get update; then
+        echo "Failed to update package lists. Exiting."
+        exit 1
+    fi
+
+    if ! sudo apt-get -y install nginx; then
+        echo "Failed to install Nginx. Exiting."
+        exit 1
+    fi
+fi
+
+if ! sudo ufw allow "Nginx HTTP"; then
+    echo "Failed to allow Nginx HTTP traffic in the firewall."
+fi
+
+echo "Hello World!" | sudo tee /var/www/html/index.nginx-debian.html > /dev/null
+
+if [ -e /etc/nginx/sites-available/default ]; then
+    # Backup existing configuration
+    if ! sudo cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak; then
+        echo "Failed to backup the Nginx configuration. Continuing without backup."
+    else
+        echo "Nginx configuration backed up successfully."
+    fi
+fi
+
+# Modify the Nginx configuration
+sudo sed -i '/^\slisten 80 default_server;/ {
+    s|^listen 80 default_server;|&\n    error_page 404 /404.html;|
+    a \    error_page 404 /404.html;
+    a \    location = /404.html {
+    a \        root /var/www/html;
+    a \        internal;
+    a \    }
+    a \    rewrite ^/redirect_me https://github.com/pius-aaron04 permanent;
+}' /etc/nginx/sites-available/default
+
+# Add header to Nginx configuration
+sudo sed -i '/^\s*try_files \$uri \$uri\/ =404;/ {
+    s|^\s*try_files \$uri \$uri\/ =404;|&\n    add_header X-Served-By \$host;|
+}' /etc/nginx/sites-available/default
+
+# Create custom 404 page
+echo "Ceci n'est pas une page" | sudo tee /var/www/html/404.html > /dev/null
+
+# Restart Nginx service
+sudo service nginx restart

@@ -1,13 +1,44 @@
 #!/usr/bin/env bash
+# Installs and configures HAproxy sever
+# with two webs ervers uses roundrobin for load balancing among both servers
 
+#Installation
 if ! dpkg -l | grep -q "haproxy";
 then
-    if ! sudo apt-get update;
+    if ! apt-get update;
     then
+	printf "Failed to Update package list\nExit. . ."
         exit 1;
     fi
-    if ! sudo apt-get install haproxy -y;
+    if ! apt-get install haproxy -y;
     then
-        echo "failed to install HAproxy"
+        printf "Failed to install HAproxy\nExiting . . ."
+	exit 1
     fi
+fi
+
+# Configuration
+
+if ! [ -e /etc/haproxy/haproxy.cfg.original ];
+then
+	echo "Backing up original configuration file"
+	sudo cp /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg.original
+else
+	sudo cp /etc/haproxy/haproxy.cfg.original /etc/haproxy/haproxy.cfg
+fi
+
+if [ -e /etc/haproxy/haproxy.cfg ];
+then
+	sudo tee -a /etc/haproxy/haproxy.cfg > /dev/null << EOF
+frontend http_front
+	bind *:80
+	stats uri /haproxy?stats
+	default_backend http_back
+
+backend http_back
+	roundrobin
+	server 425669-web-01 124.234.253.75:80 check
+	server 425669-web-02 54.174.123.116:80 check
+EOF
+echo "Configuration Done!"
 fi

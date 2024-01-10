@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+if ! dpkg -l | grep -q "haproxy";
+then
+    if ! sudo apt-get update;
+    then
+        exit 1;
+    fi
+    if ! sudo apt-get install haproxy -y;
+    then
+        echo "failed to install HAproxy"
+    fi
+fi

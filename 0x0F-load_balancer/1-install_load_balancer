@@ -29,14 +29,13 @@ fi
 
 if [ -e /etc/haproxy/haproxy.cfg ];
 then
-	sudo tee -a /etc/haproxy/haproxy.cfg > /dev/null << EOF
+	sudo tee /etc/haproxy/haproxy.cfg > /dev/null << EOF
 frontend http_front
 	bind *:80
-	stats uri /haproxy?stats
 	default_backend http_back
 
 backend http_back
-	roundrobin
+	balance roundrobin
 	server 425669-web-01 124.234.253.75:80 check
 	server 425669-web-02 54.174.123.116:80 check
 EOF

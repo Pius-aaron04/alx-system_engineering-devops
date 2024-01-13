@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+# Displays information about the provided domain at the CLI
+
+if [ $# -eq 0 ];
+then
+	exit
+fi
+fetch() {
+	answer=$(dig "$1" | grep -A1 'ANSWER SECTION' | tail -n1)
+	sub_domains=("www" "lb-01" "web-01" "web-02")
+
+	for element in "${sub_domains[@]}";
+	do
+		if [[ $answer =~ $element ]]; then
+			record_type=$(echo "$answer" | awk '{print $4}')
+			ip=$(echo "$answer" | awk '{print $5}')
+			echo "The subdomain $element is a $record_type record and points to $ip"
+			exit 0
+		fi
+	done
+	for element in "${sub_domains[@]}";
+	do
+		delim="."
+		answer=$(dig "$element$delim$1" | grep -A1 'ANSWER SECTION' | tail -n1)
+		record_type=$(echo "$answer" | awk '{print $4}')
+		ip=$(echo "$answer" | awk '{print $5}')
+		echo "The subdomain $element is a $record_type record and points to $ip"
+	done
+
+}
+
+fetch $1

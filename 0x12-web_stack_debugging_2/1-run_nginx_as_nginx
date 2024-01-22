@@ -10,4 +10,4 @@ chmod 600 /etc/nginx/nginx.conf
 chown nginx:nginx /etc/nginx/nginx.conf /etc/systemd/system/multi-user.target.wants/nginx.service
 
 # restarts nginx as user 'nginx'
-su -s /usr/bin/evn bash -c 'service nginx restart' nginx
+su nginx -c 'service nginx restart'

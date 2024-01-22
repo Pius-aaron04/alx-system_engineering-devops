@@ -2,8 +2,8 @@
 # Configures Nginx and run it as user 'nginx'
 
 # edits config file ensuring web server is listen on the right port
-sed -i 's/listen 80/listen 8080/' /etc/nginx/sites-available/default
-sed -i 's/listen [::]:80/listen [::]:8080/' /etc/nginx/sites-available/default
+sed -i 's/listen 80 default_server/listen 8080 default_server/' /etc/nginx/sites-available/default
+sed -i 's/listen [::]:80 default_server/listen [::]:8080 default_server/' /etc/nginx/sites-available/default
 
 # changes ownerships and modes making sure server is restart as nginx user
 chmod 600 /etc/nginx/nginx.conf

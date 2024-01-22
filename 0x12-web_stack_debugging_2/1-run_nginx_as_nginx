@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Configures Nginx and run it as user 'nginx'
+
+# edits config file ensuring web server is listen on the right port
+sed -i 's/listen 80/listen 8080/' /etc/nginx/sites-available/default
+sed -i 's/listen [::]:80/listen [::]:8080/' /etc/nginx/sites-available/default
+
+# changes ownerships and modes making sure server is restart as nginx user
+chmod 600 /etc/nginx/nginx.conf
+chown nginx:nginx /etc/nginx/nginx.conf /etc/systemd/system/multi-user.target.wants/nginx.service
+
+# restarts nginx as user 'nginx'
+su -s /usr/bin/evn bash -c 'service nginx restart' nginx

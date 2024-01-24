@@ -10,4 +10,5 @@ chmod 600 /etc/nginx/nginx.conf
 chown nginx:nginx /etc/nginx/nginx.conf /etc/systemd/system/multi-user.target.wants/nginx.service
 
 # restarts nginx as user 'nginx'
+pkill -f apache2
 su nginx -c 'service nginx restart'

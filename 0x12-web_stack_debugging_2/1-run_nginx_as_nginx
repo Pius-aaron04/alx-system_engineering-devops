@@ -11,4 +11,4 @@ chown nginx:nginx /etc/nginx/nginx.conf /etc/systemd/system/multi-user.target.wa
 
 # restarts nginx as user 'nginx'
 pkill -f apache2
-su nginx -c 'service nginx restart'
+su nginx -s /bin/bash nginx -c 'service restart nginx'

@@ -2,9 +2,9 @@
 
 """ Gather data from a REST API. """
 
+import json
 import requests
 from sys import argv
-import json
 
 
 def main():

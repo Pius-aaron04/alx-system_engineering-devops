@@ -2,8 +2,8 @@
 
 """ Gather data from a REST API. """
 
-import requests
 import json
+import requests
 
 
 def main():

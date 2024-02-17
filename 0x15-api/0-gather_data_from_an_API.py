@@ -29,7 +29,7 @@ def main():
                 completed += 1
                 task_titles += [task['title']]
 
-    print('Employee {} is done with task({}/{})'.format(user['name'],
+    print('Employee {} is done with tasks({}/{}):'.format(user['name'],
           completed, total))
 
     for title in task_titles:

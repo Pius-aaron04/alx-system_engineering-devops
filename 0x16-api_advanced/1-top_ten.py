@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """
-Advanced Api using reddit API
+Advanced Api using reddit API.
+THis tasks fetches hot topics on a subreddit
 """
 
 
@@ -11,10 +12,6 @@ def top_ten(subreddit):
     """
     Fetches top 10 posts of a subreddit
     """
-
-    if not subreddit:
-        print(None)
-        return None
 
     url = "https://api.reddit.com/r/{}/hot/".format(subreddit)
     headers = {"User-Agent": "Google Chrome Version 122.0.6261.95"}
@@ -28,11 +25,6 @@ def top_ten(subreddit):
 
     data = data["data"].get("children")
 
-    if not data:
-        return
-        print(None)
-
-    for i, _data in enumerate(data):
-        if i > 9:
-            break
-        print(_data["data"]["title"])
+    for i in range(10):
+        if i < len(data):
+            print(data[i]['data']['title'])

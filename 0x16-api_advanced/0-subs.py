@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """
 Advanced API data fetching.
 """

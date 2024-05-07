@@ -19,7 +19,7 @@ def top_ten(subreddit):
     url = "https://api.reddit.com/r/{}/hot/".format(subreddit)
     headers = {"User-Agent": "Google Chrome Version 122.0.6261.95"}
 
-    response = requests.get(url, headers=headers)
+    response = requests.get(url, headers=headers, allow_redirects=False)
     data = response.json()
 
     if response.status_code != 200:

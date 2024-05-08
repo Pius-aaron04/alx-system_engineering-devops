@@ -17,14 +17,19 @@ def top_ten(subreddit):
     headers = {"User-Agent": "Google Chrome Version 122.0.6261.95"}
 
     response = requests.get(url, headers=headers, allow_redirects=False)
-    data = response.json()
 
-    if response.status_code != 200:
+    try:
+        data = response.json()
+
+        if response.status_code != 200:
+            print(None)
+            return None
+
+        data = data["data"].get("children")
+
+        for i in range(10):
+            if i < len(data):
+                print(data[i]['data']['title'])
+    except Exception:
         print(None)
         return None
-
-    data = data["data"].get("children")
-
-    for i in range(10):
-        if i < len(data):
-            print(data[i]['data']['title'])

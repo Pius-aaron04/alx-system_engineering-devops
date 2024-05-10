@@ -4,6 +4,6 @@
 $file_path = '/var/www/html/wp-settings.php'
 
 exec { $file_path:
-  command  => "sed -i 's/phpp/php/g' ${file_path}",
-  path     => ['/bin', '/usr/bin']
+  command => "sed -i 's/phpp/php/g' ${file_path}",
+  path    => ['/bin', '/usr/bin']
 }

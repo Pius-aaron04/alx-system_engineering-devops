@@ -38,6 +38,12 @@ server {
 		proxy_pass http://localhost:5001;
 	}
 
+	location /api/ {
+		include proxy_params;
+		proxy_pass http://localhost:5002;
+	}
+
+
 # SSL configuration
 #
 # listen 443 ssl default_server;
@@ -62,8 +68,11 @@ server {
 	server_name _;
 
 	location / {
-# First attempt to serve request as file, then
-# as directory, then fall back to displaying a 404.
+	# First attempt to serve request as file, then
+	# as directory, then fall back to displaying a 404.
+		root /web_dynamic/static/
+		include proxy_params;
+		proxy_pass http://localhost:5003;
 		try_files $uri $uri/ =404;
 		add_header X-Served-By $hostname;
 	}

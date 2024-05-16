@@ -40,7 +40,7 @@ server {
 
 	location /api/ {
 		include proxy_params;
-		proxy_pass http://localhost:5002;
+		proxy_pass http://localhost:5002/api;
 	}
 
 # SSL configuration
